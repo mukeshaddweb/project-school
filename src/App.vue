@@ -1,10 +1,38 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/Dashboard" v-if="islogin">Dashboard</router-link> |
+    <router-link to="/"  v-if="!islogin">Sign In</router-link> |
+    <router-link to="/signUp">Sign Up</router-link> |
+    <router-link to="/classInfo"  v-if="islogin">Class Info</router-link>
   </div>
   <router-view/>
 </template>
+
+<script>
+import { computed, onMounted, ref } from "vue";
+import { useStore } from "vuex";
+
+export default {
+  setup() {
+    const isAuth = ref(false);
+    const store = useStore();
+
+    const islogin = computed(()=>{
+      return store.getters.getIsAuth;
+    });
+    
+    onMounted(() => {
+      isAuth.value = store.getters.getIsAuth;
+    });
+
+    return {
+      store,
+      isAuth,
+      islogin,
+    };
+  },
+};
+</script>
 
 <style>
 #app {
